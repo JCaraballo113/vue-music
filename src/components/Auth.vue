@@ -48,7 +48,7 @@
           </ul>
 
           <!-- Login Form -->
-          <form v-if="tab === 'login'">
+          <form v-show="tab === 'login'">
             <!-- Email -->
             <div class="mb-3">
               <label class="inline-block mb-2">Email</label>
@@ -75,7 +75,7 @@
             </button>
           </form>
           <!-- Registration Form -->
-          <form v-else>
+          <form v-show="tab === 'register'">
             <!-- Name -->
             <div class="mb-3">
               <label class="inline-block mb-2">Name</label>
