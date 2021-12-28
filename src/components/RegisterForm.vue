@@ -137,7 +137,14 @@ export default {
       this.reg_alert_variant = 'bg-blue-500';
       this.reg_alert_msg = 'Please wait! Your account is being created.';
 
-      await this.registration(values.email, values.password);
+      await this.registration({
+        email: values.email,
+        password: values.password,
+        name: values.name,
+        age: values.age,
+        country: values.country,
+        tos: values.tos,
+      });
 
       this.reg_alert_variant = 'bg-green-500';
       this.reg_alert_msg = 'Success! Your account has been created.';
