@@ -21,8 +21,6 @@ const useAuthStore = defineStore('auth', {
         { redirectTo: 'http://localhost:8080' },
       );
       supabase.auth.setSession(session.refresh_token);
-      console.log(user);
-      console.log(session);
       this.user = user;
       this.authModalShow = false;
     },
