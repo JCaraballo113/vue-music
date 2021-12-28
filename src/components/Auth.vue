@@ -46,7 +46,7 @@
               >
             </li>
           </ul>
-          <login-form v-if="tab === 'login'" />
+          <login-form v-if="tab === 'login'" @login_success="toggleAuthModal" />
           <register-form v-else />
         </div>
       </div>
@@ -69,7 +69,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(useAuthStore, ['authModalShow']),
+    ...mapState(useAuthStore, ['authModalShow', 'user']),
   },
   methods: {
     ...mapActions(useAuthStore, ['toggleAuthModal']),

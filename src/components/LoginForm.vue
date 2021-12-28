@@ -35,6 +35,7 @@ import supabase from '../includes/supabase';
 
 export default {
   name: 'LoginForm',
+  emits: ['login_success'],
   data() {
     return {
       loginSchema: {
@@ -55,6 +56,7 @@ export default {
 
       try {
         const { error } = await supabase.auth.signIn({ email: values.email });
+        this.$emit('login_success');
         if (error) {
           throw error;
         }

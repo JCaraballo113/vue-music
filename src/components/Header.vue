@@ -9,13 +9,17 @@
         <!-- Primary Navigation -->
         <ul class="flex flex-row mt-1">
           <!-- Navigation Links -->
-          <li>
+          <li v-if="!user">
             <a class="px-2 text-white" href="#" @click.prevent="toggleAuthModal"
               >Login / Register</a
             >
           </li>
+
           <li>
             <a class="px-2 text-white" href="#">Manage</a>
+          </li>
+          <li v-if="user">
+            <a class="px-2 text-white" href="#" @click.prevent="logout">Logout</a>
           </li>
         </ul>
       </div>
@@ -24,13 +28,16 @@
 </template>
 
 <script>
-import { mapActions } from 'pinia';
+import { mapActions, mapState } from 'pinia';
 import useAuthStore from '../stores/auth';
 
 export default {
   name: 'Header',
+  computed: {
+    ...mapState(useAuthStore, ['user']),
+  },
   methods: {
-    ...mapActions(useAuthStore, ['toggleAuthModal']),
+    ...mapActions(useAuthStore, ['toggleAuthModal', 'logout']),
   },
 };
 </script>
