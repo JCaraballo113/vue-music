@@ -1,5 +1,12 @@
 <template>
   <!-- Login Form -->
+  <div
+    class="text-white text-center font-bold p-5 mb-4"
+    v-if="login_show_alert"
+    :class="login_alert_variant"
+  >
+    {{ login_alert_msg }}
+  </div>
   <vee-form @submit="login" :validation-schema="loginSchema">
     <!-- Email -->
     <div class="mb-3">
@@ -24,6 +31,7 @@
       <ErrorMessage class="text-red-600" name="password" />
     </div>
     <button
+      :disabled="login_in_submission"
       type="submit"
       class="block w-full bg-purple-600 text-white py-1.5 px-3 rounded transition hover:bg-purple-700"
     >
@@ -41,14 +49,21 @@ export default {
         email: 'required|email',
         password: 'required|min:3|max:32',
       },
-      reg_in_submission: false,
-      reg_show_alert: false,
-      reg_alert_variant: 'bg-blue-500',
-      reg_alert_msg: 'Please wait! Your account is being created',
+      login_in_submission: false,
+      login_show_alert: false,
+      login_alert_variant: 'bg-blue-500',
+      login_alert_msg: 'Please wait! We are logging you in',
     };
   },
   methods: {
     login(values) {
+      this.login_in_submission = true;
+      this.login_show_alert = true;
+      this.login_alert_variant = 'bg-blue-500';
+      this.login_alert_msg = 'Please wait! We are logging you in.';
+
+      this.login_alert_variant = 'bg-green-500';
+      this.login_alert_msg = 'Success! You are now logged in';
       console.log(values);
     },
   },
