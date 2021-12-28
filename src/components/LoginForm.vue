@@ -7,7 +7,7 @@
   >
     {{ login_alert_msg }}
   </div>
-  <vee-form @submit="login" :validation-schema="loginSchema">
+  <vee-form @submit="startLogin" :validation-schema="loginSchema">
     <!-- Email -->
     <div class="mb-3">
       <label class="inline-block mb-2">Email</label>
@@ -19,19 +19,30 @@
       />
       <ErrorMessage class="text-red-600" name="email" />
     </div>
-
+    <!-- Password -->
+    <div class="mb-3">
+      <label class="inline-block mb-2">Password</label>
+      <vee-field
+        type="password"
+        name="password"
+        class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+        placeholder="Enter Password"
+      />
+      <ErrorMessage class="text-red-600" name="password" />
+    </div>
     <button
       :disabled="login_in_submission"
       type="submit"
       class="block w-full bg-purple-600 text-white py-1.5 px-3 rounded transition hover:bg-purple-700"
     >
-      Magic Link Login
+      Login
     </button>
   </vee-form>
 </template>
 
 <script>
-import supabase from '../includes/supabase';
+import { mapActions } from 'pinia';
+import useAuthStore from '../stores/auth';
 
 export default {
   name: 'LoginForm',
@@ -40,6 +51,7 @@ export default {
     return {
       loginSchema: {
         email: 'required|email',
+        password: 'required|min:3|max:100',
       },
       login_in_submission: false,
       login_show_alert: false,
@@ -48,23 +60,20 @@ export default {
     };
   },
   methods: {
-    async login(values) {
+    ...mapActions(useAuthStore, ['login']),
+    async startLogin(values) {
       this.login_in_submission = true;
       this.login_show_alert = true;
       this.login_alert_variant = 'bg-blue-500';
       this.login_alert_msg = 'Please wait! We are logging you in.';
 
       try {
-        const { error } = await supabase.auth.signIn({ email: values.email });
-        this.$emit('login_success');
-        if (error) {
-          throw error;
-        }
+        await this.login(values.email, values.password);
       } catch (error) {
         alert(error.error_description || error.message);
       } finally {
         this.login_alert_variant = 'bg-green-500';
-        this.login_alert_msg = 'Success! Check your email for the login link!';
+        this.login_alert_msg = 'Success!';
         console.log(values);
       }
     },
