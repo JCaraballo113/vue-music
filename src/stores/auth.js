@@ -12,7 +12,6 @@ const useAuthStore = defineStore('auth', {
     },
     async authenticate() {
       const user = supabase.auth.user();
-      console.log(user);
       this.user = user;
     },
     async registration({ email, password, ...meta }) {
@@ -34,10 +33,7 @@ const useAuthStore = defineStore('auth', {
     },
     async login(email, password) {
       try {
-        const { user, session } = await supabase.auth.signIn(
-          { email, password },
-          { redirectTo: `${window.location.origin}` },
-        );
+        const { user, session } = await supabase.auth.signIn({ email, password });
         supabase.auth.setSession(session.refresh_token);
         this.user = user;
         this.authModalShow = false;

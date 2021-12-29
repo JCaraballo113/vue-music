@@ -276,14 +276,22 @@
 </template>
 
 <script>
+import { mapActions } from 'pinia';
 import AppHeader from './components/Header.vue';
 import AuthModal from './components/Auth.vue';
+import useAuthStore from './stores/auth';
 
 export default {
   name: 'App',
   components: {
     AppHeader,
     AuthModal,
+  },
+  created() {
+    this.authenticate();
+  },
+  methods: {
+    ...mapActions(useAuthStore, ['authenticate']),
   },
 };
 </script>
