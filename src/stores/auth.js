@@ -28,7 +28,9 @@ const useAuthStore = defineStore('auth', {
         this.user = user;
         this.authModalShow = false;
       } catch (e) {
+        console.log(e);
         console.log('Error', e.message);
+        throw e;
       }
     },
     async login(email, password) {
