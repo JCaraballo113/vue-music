@@ -44,7 +44,7 @@ const useAuthStore = defineStore('auth', {
         this.authModalShow = false;
       } catch (e) {
         console.log(e.message);
-        throw error;
+        throw e;
       }
     },
     async logout() {

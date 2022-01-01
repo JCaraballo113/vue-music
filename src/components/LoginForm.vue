@@ -14,7 +14,18 @@
       <vee-field
         type="email"
         name="email"
-        class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+        class="
+          block
+          w-full
+          py-1.5
+          px-3
+          text-gray-800
+          border border-gray-300
+          transition
+          duration-500
+          focus:outline-none focus:border-black
+          rounded
+        "
         placeholder="Enter Email"
       />
       <ErrorMessage class="text-red-600" name="email" />
@@ -25,7 +36,18 @@
       <vee-field
         type="password"
         name="password"
-        class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+        class="
+          block
+          w-full
+          py-1.5
+          px-3
+          text-gray-800
+          border border-gray-300
+          transition
+          duration-500
+          focus:outline-none focus:border-black
+          rounded
+        "
         placeholder="Enter Password"
       />
       <ErrorMessage class="text-red-600" name="password" />
@@ -33,7 +55,17 @@
     <button
       :disabled="login_in_submission"
       type="submit"
-      class="block w-full bg-purple-600 text-white py-1.5 px-3 rounded transition hover:bg-purple-700"
+      class="
+        block
+        w-full
+        bg-purple-600
+        text-white
+        py-1.5
+        px-3
+        rounded
+        transition
+        hover:bg-purple-700
+      "
     >
       Login
     </button>
@@ -72,9 +104,9 @@ export default {
         this.login_alert_variant = 'bg-green-500';
         this.login_alert_msg = 'Success!';
       } catch (error) {
-        this.reg_alert_variant = 'bg-red-500';
-        this.reg_alert_msg = 'Invalid login credentials.';
-        this.reg_in_submission = false;
+        this.login_alert_variant = 'bg-red-500';
+        this.login_alert_msg = 'Invalid login credentials.';
+        this.login_in_submission = false;
       }
     },
   },
