@@ -35,12 +35,16 @@ const useAuthStore = defineStore('auth', {
     },
     async login(email, password) {
       try {
-        const { user, session } = await supabase.auth.signIn({ email, password });
-        supabase.auth.setSession(session.refresh_token);
+        const { user, error } = await supabase.auth.signIn({ email, password });
+
+        if (error) {
+          throw error;
+        }
         this.user = user;
         this.authModalShow = false;
       } catch (e) {
         console.log(e.message);
+        throw error;
       }
     },
     async logout() {

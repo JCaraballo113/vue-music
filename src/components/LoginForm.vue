@@ -69,11 +69,12 @@ export default {
 
       try {
         await this.login(values.email, values.password);
-      } catch (error) {
-        alert(error.error_description || error.message);
-      } finally {
         this.login_alert_variant = 'bg-green-500';
         this.login_alert_msg = 'Success!';
+      } catch (error) {
+        this.reg_alert_variant = 'bg-red-500';
+        this.reg_alert_msg = 'Invalid login credentials.';
+        this.reg_in_submission = false;
       }
     },
   },
