@@ -136,17 +136,17 @@
   </section>
 </template>
 <script>
-import useAuthStore from '@/stores/auth';
+// import useAuthStore from '@/stores/auth';
 
 export default {
   name: 'Manage',
-  beforeRouteEnter(to, from, next) {
-    const store = useAuthStore();
-    if (store.user) {
-      next();
-    }
+  // beforeRouteEnter(to, from, next) {
+  //   const store = useAuthStore();
+  //   if (store.user) {
+  //     next();
+  //   }
 
-    next({ name: 'home' });
-  },
+  //   next({ name: 'home' });
+  // },
 };
 </script>

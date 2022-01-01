@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { mapState } from 'pinia';
+import { mapState, mapActions } from 'pinia';
 import useAuthStore from '../stores/auth';
 
 export default {
@@ -46,11 +46,12 @@ export default {
     ...mapState(useAuthStore, ['user']),
   },
   methods: {
+    ...mapActions(useAuthStore, ['toggleAuthModal']),
     signOut() {
       const store = useAuthStore();
 
       store.logout();
-      if (this.$route.name === 'manage') {
+      if (this.$route.meta.requiresAuth) {
         this.$router.push({ name: 'home' });
       }
     },
