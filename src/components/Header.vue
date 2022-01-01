@@ -27,7 +27,7 @@
               <router-link class="px-2 text-white" :to="{ name: 'manage' }">Manage</router-link>
             </li>
             <li>
-              <a class="px-2 text-white" href="#" @click.prevent="logout">Logout</a>
+              <a class="px-2 text-white" href="#" @click.prevent="signOut">Logout</a>
             </li>
           </template>
         </ul>
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia';
+import { mapState } from 'pinia';
 import useAuthStore from '../stores/auth';
 
 export default {
@@ -46,7 +46,14 @@ export default {
     ...mapState(useAuthStore, ['user']),
   },
   methods: {
-    ...mapActions(useAuthStore, ['toggleAuthModal', 'logout']),
+    signOut() {
+      const store = useAuthStore();
+
+      store.logout();
+      if (this.$route.name === 'manage') {
+        this.$router.push({ name: 'home' });
+      }
+    },
   },
 };
 </script>
