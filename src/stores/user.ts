@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import { useRouter } from 'vue-router'
 import supabase from '@/includes/supabase'
 
 export interface RegisterCredentials {
@@ -69,7 +70,6 @@ export default defineStore('user', () => {
     const { error: logoutError } = await supabase.auth.signOut()
     if (logoutError) {
       authError.value = logoutError.message
-      console.log(logoutError)
       return
     }
     userLoggedIn.value = false
