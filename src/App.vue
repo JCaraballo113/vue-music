@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
 import AppHeader from './components/AppHeader.vue'
 import AppAuth from './components/AppAuth.vue'
 import useUserStore from '@/stores/user'

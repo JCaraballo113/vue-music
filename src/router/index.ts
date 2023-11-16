@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import Home from '@/views/HomeView.vue'
 import Manage from '@/views/ManageView.vue'
 import useUserStore from '@/stores/user'
+import supabase from '@/includes/supabase'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -36,14 +37,14 @@ const router = createRouter({
   linkExactActiveClass: 'text-yellow-500'
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   if (!to.meta.requiresAuth) {
     next()
     return
   }
-  const userStore = useUserStore()
+  const session = await supabase.auth.getSession()
 
-  if (userStore.userLoggedIn) {
+  if (session) {
     next()
     return
   } else {
