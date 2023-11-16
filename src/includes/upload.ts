@@ -13,6 +13,8 @@ export type FileUploadResponse = {
   song_url: string | null
 }
 
+const MAX_UPLOAD_SIZE = 6 * 1024 * 1024 // NOTE: it must be set to 6MB (for now) do not change it
+
 export const uploadWithProgress = (
   { file, bucketName, objectName, accessToken, upsert = 'true' }: UploadConfig,
   onProgressCallback: (bytesUploaded: number, bytesTotal: number) => void,
@@ -35,7 +37,7 @@ export const uploadWithProgress = (
       objectName,
       cacheControl: '3600'
     },
-    chunkSize: 6 * 1024 * 1024, // NOTE: it must be set to 6MB (for now) do not change it
+    chunkSize: MAX_UPLOAD_SIZE,
     onError: function (error) {
       console.log('Failed because: ' + error)
       const response: FileUploadResponse = {
