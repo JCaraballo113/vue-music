@@ -47,7 +47,11 @@ export const uploadWithProgress = (
     },
     onProgress: onProgressCallback,
     onSuccess: function () {
-      onSuccessCallback({ message: 'Success', fileName: file.name, song_url: upload.url })
+      const song_url = `https://${
+        import.meta.env.VITE_SUPABASE_PROJECT_ID
+      }.supabase.co/storage/v1/object/public/${bucketName}/${objectName}`
+
+      onSuccessCallback({ message: 'Success', fileName: file.name, song_url })
     }
   })
 

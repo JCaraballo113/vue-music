@@ -89,7 +89,7 @@ const upload = async (event: any) => {
     const upload = uploadWithProgress(
       {
         file,
-        bucketName: 'music',
+        bucketName: 'songs',
         objectName: `${session?.user.id}/${file.name}`,
         accessToken: session?.access_token
       },
