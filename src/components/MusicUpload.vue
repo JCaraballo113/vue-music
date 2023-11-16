@@ -19,6 +19,7 @@
       >
         <h5>Drop your files here</h5>
       </div>
+      <input type="file" multiple @change="upload($event)" />
       <hr class="my-6" />
       <!-- Progess Bars -->
       <div class="mb-4" v-for="upload in uploads" :key="upload.name">
@@ -41,20 +42,31 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onBeforeUnmount } from 'vue'
 import supabase from '@/includes/supabase'
+import * as tus from 'tus-js-client'
 import { uploadWithProgress, type FileUploadResponse } from '@/includes/upload'
 
-interface Upload {
+type Upload = {
   name: string
   progress: number
   uploadVariant: string
   uploadTextClass: string
   icon: string
   error: string | null
+  upload: tus.Upload
 }
+
 const isDragOver = ref(false)
 const uploads = ref<Upload[]>([])
+
+onBeforeUnmount(() => {
+  for (const upload of uploads.value) {
+    upload.upload.abort().catch(() => {
+      console.log('abort error')
+    })
+  }
+})
 
 const getCurrentUpload = (fileName: string): Upload | undefined => {
   const currentUpload = uploads.value.find((u) => u.name === fileName)
@@ -62,9 +74,11 @@ const getCurrentUpload = (fileName: string): Upload | undefined => {
   return currentUpload
 }
 
-const upload = async (event: DragEvent) => {
+const upload = async (event: any) => {
   isDragOver.value = false
-  const files = [...(event.dataTransfer?.files ?? [])]
+  const files = event.dataTransfer
+    ? [...(event.dataTransfer?.files ?? [])]
+    : [...event.target.files]
 
   files.forEach(async (file) => {
     if (file.type !== 'audio/mpeg') {
@@ -72,16 +86,7 @@ const upload = async (event: DragEvent) => {
     }
     const { data } = await supabase.auth.getSession()
     const { session } = data
-    uploads.value.push({
-      name: file.name,
-      progress: 0,
-      error: null,
-      uploadVariant: 'bg-blue-400',
-      icon: 'fas fa-spinner fa-spin',
-      uploadTextClass: ''
-    })
-
-    uploadWithProgress(
+    const upload = uploadWithProgress(
       {
         file,
         bucketName: 'music',
@@ -95,17 +100,31 @@ const upload = async (event: DragEvent) => {
         if (currentUpload) {
           currentUpload.progress = percentage
         }
-      }
-    )
-      .then((response: FileUploadResponse) => {
+      },
+      async (response: FileUploadResponse) => {
+        const song: any = {
+          display_name: response.fileName,
+          original_name: response.fileName,
+          modified_name: response.fileName,
+          genre: '',
+          comment_count: 0,
+          song_url: response.song_url
+        }
         const currentUpload = getCurrentUpload(response.fileName)
         if (currentUpload) {
           currentUpload.uploadVariant = 'bg-green-400'
           currentUpload.icon = 'fas fa-check'
           currentUpload.uploadTextClass = 'text-green-400'
         }
-      })
-      .catch((error: FileUploadResponse) => {
+        const { error } = await supabase.from('songs').insert(song)
+        if (error && currentUpload) {
+          currentUpload.uploadVariant = 'bg-red-400'
+          currentUpload.icon = 'fas fa-times'
+          currentUpload.uploadTextClass = 'text-red-400'
+          currentUpload.error = error.message
+        }
+      },
+      (error: FileUploadResponse) => {
         const currentUpload = getCurrentUpload(error.fileName)
         if (currentUpload) {
           currentUpload.uploadVariant = 'bg-red-400'
@@ -113,7 +132,17 @@ const upload = async (event: DragEvent) => {
           currentUpload.uploadTextClass = 'text-red-400'
           currentUpload.error = error.message
         }
-      })
+      }
+    )
+    uploads.value.push({
+      name: file.name,
+      progress: 0,
+      error: null,
+      uploadVariant: 'bg-blue-400',
+      icon: 'fas fa-spinner fa-spin',
+      uploadTextClass: '',
+      upload
+    })
   })
 }
 </script>

@@ -4,6 +4,39 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export interface Database {
   public: {
     Tables: {
+      songs: {
+        Row: {
+          comment_count: number | null
+          display_name: string
+          genre: string | null
+          id: number
+          modified_name: string
+          original_name: string
+          song_url: string
+          user_id: string
+        }
+        Insert: {
+          comment_count?: number | null
+          display_name: string
+          genre?: string | null
+          id?: number
+          modified_name: string
+          original_name: string
+          song_url: string
+          user_id?: string
+        }
+        Update: {
+          comment_count?: number | null
+          display_name?: string
+          genre?: string | null
+          id?: number
+          modified_name?: string
+          original_name?: string
+          song_url?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       users: {
         Row: {
           age: number
@@ -12,6 +45,7 @@ export interface Database {
           email: string
           id: number
           name: string
+          song_id: number | null
         }
         Insert: {
           age: number
@@ -20,6 +54,7 @@ export interface Database {
           email: string
           id?: number
           name: string
+          song_id?: number | null
         }
         Update: {
           age?: number
@@ -28,8 +63,17 @@ export interface Database {
           email?: string
           id?: number
           name?: string
+          song_id?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'users_song_id_fkey'
+            columns: ['song_id']
+            isOneToOne: false
+            referencedRelation: 'songs'
+            referencedColumns: ['id']
+          }
+        ]
       }
     }
     Views: {
