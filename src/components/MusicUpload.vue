@@ -61,8 +61,8 @@ const isDragOver = ref(false)
 const uploads = ref<Upload[]>([])
 
 onBeforeUnmount(() => {
-  for (const upload of uploads.value) {
-    upload.upload.abort().catch(() => {
+  for (const { upload } of uploads.value) {
+    upload.abort().catch(() => {
       console.log('abort error')
     })
   }
