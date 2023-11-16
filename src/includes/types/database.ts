@@ -12,6 +12,7 @@ export interface Database {
           id: number
           modified_name: string
           original_name: string
+          song_url: string | null
           user_id: string
         }
         Insert: {
@@ -21,6 +22,7 @@ export interface Database {
           id?: number
           modified_name: string
           original_name: string
+          song_url?: string | null
           user_id?: string
         }
         Update: {
@@ -30,6 +32,7 @@ export interface Database {
           id?: number
           modified_name?: string
           original_name?: string
+          song_url?: string | null
           user_id?: string
         }
         Relationships: []
