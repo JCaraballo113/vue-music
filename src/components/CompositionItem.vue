@@ -13,7 +13,7 @@
       </button>
     </div>
     <div v-show="showSongForm">
-      <VeeForm :validation-schema="schema">
+      <VeeForm :validation-schema="schema" @submit="submitForm">
         <div class="mb-3">
           <label class="inline-block mb-2">Song Title</label>
           <VeeField
@@ -50,6 +50,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { type Song } from '@/types/music'
+
+type SongUpdates = {
+  title: string
+  genre: string | null
+}
 defineProps({
   song: {
     type: Object as () => Song,
