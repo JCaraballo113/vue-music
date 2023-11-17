@@ -1,13 +1,12 @@
 <script lang="ts" setup>
-import { onBeforeMount, ref } from 'vue'
+import { ref } from 'vue'
+import { useQuery } from '@tanstack/vue-query'
 import supabase from '@/includes/supabase'
 import MusicUpload from '@/components/MusicUpload.vue'
 import CompositionItem from '@/components/CompositionItem.vue'
 import { type Song } from '@/types/music'
 
-const songs = ref<Song[] | null>(null)
-
-onBeforeMount(async () => {
+const fetchSongs: () => Promise<Song[] | null> = async () => {
   const { data: sessionData, error: sessionError } = await supabase.auth.getSession()
   if (sessionData && sessionData.session && !sessionError) {
     const { session } = sessionData
@@ -16,9 +15,26 @@ onBeforeMount(async () => {
       .select('*')
       .eq('user_id', session.user.id)
     if (!songLoadError) {
-      songs.value = songData
+      return songData ?? ([] as Song[])
+    } else {
+      throw new Error(songLoadError.message)
     }
+  } else if (sessionError) {
+    throw new Error(sessionError.message)
   }
+
+  return null
+}
+
+const {
+  isPending,
+  isFetching,
+  isError,
+  data: songs,
+  error
+} = useQuery<Song[] | null>({
+  queryKey: ['songs'],
+  queryFn: fetchSongs
 })
 </script>
 <template>
