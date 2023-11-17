@@ -4,7 +4,7 @@
       <h4 class="inline-block text-2xl font-bold">{{ song.modified_name }}</h4>
       <button
         class="ml-1 py-1 px-2 text-sm rounded text-white bg-red-600 float-right"
-        @clic.prevent="deleteSong"
+        @click.prevent="deleteSong"
       >
         <i class="fa fa-times"></i>
       </button>
