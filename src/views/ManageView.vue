@@ -19,7 +19,7 @@ const removeSong = (index: number) => {
   }
 }
 
-onBeforeMount(async () => {
+const fetchSongs = async () => {
   const { data: sessionData, error: sessionError } = await supabase.auth.getSession()
   if (sessionData && sessionData.session && !sessionError) {
     const { session } = sessionData
@@ -31,14 +31,16 @@ onBeforeMount(async () => {
       songs.value = songData
     }
   }
-})
+}
+
+onBeforeMount(fetchSongs)
 </script>
 <template>
   <!-- Main Content -->
   <section class="container mx-auto mt-6">
     <div class="md:grid md:grid-cols-3 md:gap-4">
       <div class="col-span-1">
-        <MusicUpload />
+        <MusicUpload @song-uploaded="fetchSongs" />
       </div>
       <div class="col-span-2">
         <div class="bg-white rounded border border-gray-200 relative flex flex-col">

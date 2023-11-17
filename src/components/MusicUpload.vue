@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeUnmount } from 'vue'
+import { ref, onBeforeUnmount, watch } from 'vue'
 import supabase from '@/includes/supabase'
 import * as tus from 'tus-js-client'
 import { uploadWithProgress, type FileUploadResponse } from '@/includes/upload'
@@ -55,7 +55,10 @@ type Upload = {
   icon: string
   error: string | null
   upload: tus.Upload
+  complete: boolean
 }
+
+const emit = defineEmits(['songUploaded'])
 
 const isDragOver = ref(false)
 const uploads = ref<Upload[]>([])
@@ -67,6 +70,21 @@ onBeforeUnmount(() => {
     })
   }
 })
+
+watch(
+  uploads,
+  (newUploads, oldUploads) => {
+    const allComplete = newUploads.every((upload) => upload.complete)
+    if (allComplete) {
+      setTimeout(() => {
+        uploads.value = []
+      }, 2000)
+    }
+  },
+  {
+    deep: true
+  }
+)
 
 const getCurrentUpload = (fileName: string): Upload | undefined => {
   const currentUpload = uploads.value.find((u) => u.name === fileName)
@@ -115,6 +133,7 @@ const upload = async (event: any) => {
           currentUpload.uploadVariant = 'bg-green-400'
           currentUpload.icon = 'fas fa-check'
           currentUpload.uploadTextClass = 'text-green-400'
+          currentUpload.complete = true
         }
         const { error } = await supabase.from('songs').insert(song)
         if (error && currentUpload) {
@@ -123,6 +142,7 @@ const upload = async (event: any) => {
           currentUpload.uploadTextClass = 'text-red-400'
           currentUpload.error = error.message
         }
+        emit('songUploaded')
       },
       (error: FileUploadResponse) => {
         const currentUpload = getCurrentUpload(error.fileName)
@@ -141,7 +161,8 @@ const upload = async (event: any) => {
       uploadVariant: 'bg-blue-400',
       icon: 'fas fa-spinner fa-spin',
       uploadTextClass: '',
-      upload
+      upload,
+      complete: false
     })
   })
 }
