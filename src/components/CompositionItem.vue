@@ -31,6 +31,7 @@
             name="modified_name"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             placeholder="Enter Song Title"
+            @input="updateFlag(true)"
           />
           <ErrorMessage class="text-red-600" name="modified_name" />
         </div>
@@ -41,6 +42,7 @@
             name="genre"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             placeholder="Enter Genre"
+            @input="updateFlag(true)"
           />
           <ErrorMessage class="text-red-600" name="genre" />
         </div>
@@ -85,6 +87,10 @@ const props = defineProps({
   removeSong: {
     type: Function,
     required: true
+  },
+  updateFlag: {
+    type: Function,
+    required: true
   }
 })
 
@@ -117,6 +123,7 @@ const updateSong = async (songUpdates: SongUpdates) => {
   form.alertVariant = 'bg-green-500'
   form.alertMessage = 'Song updated successfully!'
   props.updateSong(props.index, songUpdates)
+  props.updateFlag(false)
 }
 
 const deleteSong = async () => {

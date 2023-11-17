@@ -1,11 +1,22 @@
 <script lang="ts" setup>
 import { onBeforeMount, ref } from 'vue'
+import { onBeforeRouteLeave } from 'vue-router'
 import supabase from '@/includes/supabase'
 import MusicUpload from '@/components/MusicUpload.vue'
 import CompositionItem from '@/components/CompositionItem.vue'
 import { type Song, type SongUpdates } from '@/types/music'
 
 const songs = ref<Song[] | null>(null)
+const unsavedChanges = ref(false)
+
+onBeforeRouteLeave((to, from, next) => {
+  if (unsavedChanges.value) {
+    const leave = confirm('You have unsaved changes. Are you sure you want to leave?')
+    next(leave)
+  } else {
+    next()
+  }
+})
 
 const updateSong = (index: number, values: SongUpdates) => {
   if (songs.value && songs.value[index]) {
@@ -33,6 +44,10 @@ const fetchSongs = async () => {
   }
 }
 
+const updateFlag = (value: boolean) => {
+  unsavedChanges.value = value
+}
+
 onBeforeMount(fetchSongs)
 </script>
 <template>
@@ -55,6 +70,7 @@ onBeforeMount(fetchSongs)
               :index="idx"
               :remove-song="removeSong"
               :update-song="updateSong"
+              :update-flag="updateFlag"
             />
           </div>
         </div>
