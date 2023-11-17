@@ -2,7 +2,10 @@
   <div class="border border-gray-200 p-3 mb-4 rounded">
     <div v-show="!showSongForm">
       <h4 class="inline-block text-2xl font-bold">{{ song.modified_name }}</h4>
-      <button class="ml-1 py-1 px-2 text-sm rounded text-white bg-red-600 float-right">
+      <button
+        class="ml-1 py-1 px-2 text-sm rounded text-white bg-red-600 float-right"
+        @clic.prevent="deleteSong"
+      >
         <i class="fa fa-times"></i>
       </button>
       <button
@@ -78,6 +81,10 @@ const props = defineProps({
   updateSong: {
     type: Function,
     required: true
+  },
+  removeSong: {
+    type: Function,
+    required: true
   }
 })
 
@@ -110,6 +117,28 @@ const updateSong = async (songUpdates: SongUpdates) => {
   form.alertVariant = 'bg-green-500'
   form.alertMessage = 'Song updated successfully!'
   props.updateSong(props.index, songUpdates)
+}
+
+const deleteSong = async () => {
+  const { data: sessionData, error: sessionError } = await supabase.auth.getSession()
+  if (!sessionError && sessionData.session) {
+    const { session } = sessionData
+    const { user } = session
+    const { error: fileDeleteError } = await supabase.storage
+      .from('songs')
+      .remove([`${user.id}/${props.song.original_name}`])
+
+    if (!fileDeleteError) {
+      const { error: songDeleteError } = await supabase
+        .from('songs')
+        .delete()
+        .eq('id', props.song.id)
+
+      if (!songDeleteError) {
+        props.removeSong(props.index)
+      }
+    }
+  }
 }
 </script>
 

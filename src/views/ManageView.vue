@@ -13,6 +13,12 @@ const updateSong = (index: number, values: SongUpdates) => {
   }
 }
 
+const removeSong = (index: number) => {
+  if (songs.value && songs.value[index]) {
+    songs.value.splice(index, 1)
+  }
+}
+
 onBeforeMount(async () => {
   const { data: sessionData, error: sessionError } = await supabase.auth.getSession()
   if (sessionData && sessionData.session && !sessionError) {
@@ -42,7 +48,12 @@ onBeforeMount(async () => {
           </div>
           <div class="p-6" v-for="(song, idx) in songs" :key="song.id">
             <!-- Composition Items -->
-            <CompositionItem :song="song" :index="idx" :update-song="updateSong" />
+            <CompositionItem
+              :song="song"
+              :index="idx"
+              :remove-song="removeSong"
+              :update-song="updateSong"
+            />
           </div>
         </div>
       </div>
