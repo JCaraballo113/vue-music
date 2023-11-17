@@ -8,3 +8,8 @@ export type Song = {
   song_url: string | null
   user_id: string
 }
+
+export type SongUpdates = {
+  modified_name: string
+  genre: string | null
+}

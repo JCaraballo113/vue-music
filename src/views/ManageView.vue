@@ -1,12 +1,17 @@
 <script lang="ts" setup>
 import { onBeforeMount, ref } from 'vue'
-import { useQuery } from '@tanstack/vue-query'
 import supabase from '@/includes/supabase'
 import MusicUpload from '@/components/MusicUpload.vue'
 import CompositionItem from '@/components/CompositionItem.vue'
-import { type Song } from '@/types/music'
+import { type Song, type SongUpdates } from '@/types/music'
 
 const songs = ref<Song[] | null>(null)
+
+const updateSong = (index: number, values: SongUpdates) => {
+  if (songs.value && songs.value[index]) {
+    songs.value[index] = { ...songs.value[index], ...values }
+  }
+}
 
 onBeforeMount(async () => {
   const { data: sessionData, error: sessionError } = await supabase.auth.getSession()
@@ -35,9 +40,9 @@ onBeforeMount(async () => {
             <span class="card-title">My Songs</span>
             <i class="fa fa-compact-disc float-right text-green-400 text-2xl"></i>
           </div>
-          <div class="p-6" v-for="song in songs" :key="song.id">
+          <div class="p-6" v-for="(song, idx) in songs" :key="song.id">
             <!-- Composition Items -->
-            <CompositionItem :song="song" />
+            <CompositionItem :song="song" :index="idx" :update-song="updateSong" />
           </div>
         </div>
       </div>
