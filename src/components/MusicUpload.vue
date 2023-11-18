@@ -102,6 +102,7 @@ const upload = async (event: any) => {
     if (file.type !== 'audio/mpeg') {
       return
     }
+
     const { data } = await supabase.auth.getSession()
     const { session } = data
     const upload = uploadWithProgress(
@@ -121,7 +122,7 @@ const upload = async (event: any) => {
       },
       async (response: FileUploadResponse) => {
         const song: any = {
-          display_name: response.fileName,
+          display_name: 'bensound',
           original_name: response.fileName,
           modified_name: response.fileName,
           genre: '',
