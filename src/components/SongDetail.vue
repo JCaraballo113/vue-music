@@ -93,14 +93,16 @@
 <script setup lang="ts">
 import supabase from '@/includes/supabase'
 import { useRoute, useRouter } from 'vue-router'
-import { computed, onBeforeMount, ref, reactive } from 'vue'
+import { computed, onBeforeMount, ref, reactive, watch } from 'vue'
 import type { Song, SongComment } from '@/types/music'
 
 const route = useRoute()
+console.log(route.query)
 const router = useRouter()
 const song = ref<Song | null>(null)
 const comments = ref<SongComment[]>([])
-const sortBy = ref<number>(1)
+const { sort }: any = route.query
+const sortBy = ref<number>(sort === '1' || sort === '2' ? Number(sort) : 1)
 const commentFormState = reactive({
   showAlert: false,
   inSubmission: false,
@@ -109,6 +111,8 @@ const commentFormState = reactive({
 })
 
 const ascending = computed(() => sortBy.value !== 1)
+
+watch(sortBy, () => router.push({ query: { sort: sortBy.value } }))
 
 const sortedComments = computed(() => {
   return comments.value.slice().sort((a, b) => {
