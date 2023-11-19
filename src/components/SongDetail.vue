@@ -63,8 +63,12 @@
     </div>
   </section>
   <!-- Comments -->
-  <ul class="container mx-auto" v-if="comments.length > 0">
-    <li class="p-6 bg-gray-50 border border-gray-200" v-for="comment in comments" :key="comment.id">
+  <ul class="container mx-auto" v-if="sortedComments.length > 0">
+    <li
+      class="p-6 bg-gray-50 border border-gray-200"
+      v-for="comment in sortedComments"
+      :key="comment.id"
+    >
       <!-- Comment Author -->
       <div class="mb-5">
         <div class="font-bold">{{ comment.users?.name }}</div>
@@ -106,18 +110,18 @@ const commentFormState = reactive({
 
 const ascending = computed(() => sortBy.value !== 1)
 
-const schema = ref({
-  comment: 'required|min:3'
-})
-
-watch(ascending, () => {
-  comments.value.sort((a, b) => {
+const sortedComments = computed(() => {
+  return comments.value.slice().sort((a, b) => {
     if (ascending.value) {
       return new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
     } else {
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     }
   })
+})
+
+const schema = ref({
+  comment: 'required|min:3'
 })
 
 const loadCommentsForSong = async (songId: number) => {
