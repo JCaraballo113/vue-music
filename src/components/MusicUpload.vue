@@ -73,8 +73,8 @@ onBeforeUnmount(() => {
 
 watch(
   uploads,
-  (newUploads, oldUploads) => {
-    const allComplete = newUploads.every((upload) => upload.complete)
+  () => {
+    const allComplete = uploads.value.every((upload) => upload.complete)
     if (allComplete) {
       setTimeout(() => {
         uploads.value = []

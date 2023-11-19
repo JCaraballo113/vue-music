@@ -6,7 +6,7 @@ export interface Database {
     Tables: {
       songs: {
         Row: {
-          comment_count: number | null
+          comment_count: number
           display_name: string
           genre: string | null
           id: number
@@ -16,7 +16,7 @@ export interface Database {
           user_id: string
         }
         Insert: {
-          comment_count?: number | null
+          comment_count?: number
           display_name: string
           genre?: string | null
           id?: number
@@ -26,7 +26,7 @@ export interface Database {
           user_id?: string
         }
         Update: {
-          comment_count?: number | null
+          comment_count?: number
           display_name?: string
           genre?: string | null
           id?: number
@@ -35,7 +35,15 @@ export interface Database {
           song_url?: string | null
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'songs_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['auth_id']
+          }
+        ]
       }
       songs_comments: {
         Row: {
@@ -50,7 +58,7 @@ export interface Database {
           created_at?: string
           id?: number
           song_id: number
-          user_id?: string
+          user_id: string
         }
         Update: {
           comment?: string
@@ -66,12 +74,20 @@ export interface Database {
             isOneToOne: false
             referencedRelation: 'songs'
             referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'songs_comments_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['auth_id']
           }
         ]
       }
       users: {
         Row: {
           age: number
+          auth_id: string
           country: string
           created_at: string
           email: string
@@ -80,6 +96,7 @@ export interface Database {
         }
         Insert: {
           age: number
+          auth_id?: string
           country?: string
           created_at?: string
           email: string
@@ -88,6 +105,7 @@ export interface Database {
         }
         Update: {
           age?: number
+          auth_id?: string
           country?: string
           created_at?: string
           email?: string

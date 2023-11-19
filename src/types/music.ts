@@ -1,5 +1,5 @@
 export type Song = {
-  comment_count: number | null
+  comment_count: number
   display_name: string
   genre: string | null
   id: number
@@ -12,4 +12,15 @@ export type Song = {
 export type SongUpdates = {
   modified_name: string
   genre: string | null
+}
+
+export type SongComment = {
+  comment: string
+  created_at: string
+  id: number
+  song_id: number
+  user_id: string
+  users: {
+    name: string
+  } | null
 }
