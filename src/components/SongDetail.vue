@@ -93,7 +93,7 @@
 <script setup lang="ts">
 import supabase from '@/includes/supabase'
 import { useRoute, useRouter } from 'vue-router'
-import { computed, onBeforeMount, ref, watch, reactive } from 'vue'
+import { computed, onBeforeMount, ref, reactive } from 'vue'
 import type { Song, SongComment } from '@/types/music'
 
 const route = useRoute()
@@ -171,11 +171,7 @@ const submitComment = async ({ comment }: { comment: string }, { resetForm }: an
     }
 
     if (newComment && song.value) {
-      if (ascending.value) {
-        comments.value.push(newComment)
-      } else {
-        comments.value.unshift(newComment)
-      }
+      comments.value.push(newComment)
       const { data } = await supabase
         .from('songs')
         .update({ id: song.value.id, comment_count: song.value.comment_count + 1 })
