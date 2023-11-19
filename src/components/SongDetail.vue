@@ -133,7 +133,7 @@ const loadCommentsForSong = async (songId: number) => {
   }
 }
 
-const submitComment = async ({ comment }: { comment: string }) => {
+const submitComment = async ({ comment }: { comment: string }, { resetForm }: any) => {
   const { data, error: loadSessionError } = await supabase.auth.getSession()
   if (loadSessionError) {
     router.push({ name: 'Home' })
@@ -184,6 +184,7 @@ const submitComment = async ({ comment }: { comment: string }) => {
         commentFormState.inSubmission = false
         commentFormState.alertVariant = 'bg-green-500'
         commentFormState.alertMessage = 'Your comment has been submitted successfully.'
+        resetForm()
       }
     }
   }
