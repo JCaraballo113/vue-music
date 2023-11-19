@@ -9,6 +9,7 @@
       <button
         type="button"
         class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
+        @click="newSong(song)"
       >
         <i class="fas fa-play"></i>
       </button>
@@ -91,13 +92,15 @@
 </template>
 
 <script setup lang="ts">
-import supabase from '@/includes/supabase'
 import { useRoute, useRouter } from 'vue-router'
 import { computed, onBeforeMount, ref, reactive, watch } from 'vue'
 import type { Song, SongComment } from '@/types/music'
+import usePlayerStore from '@/stores/player'
+import supabase from '@/includes/supabase'
+
+const { newSong } = usePlayerStore()
 
 const route = useRoute()
-console.log(route.query)
 const router = useRouter()
 const song = ref<Song | null>(null)
 const comments = ref<SongComment[]>([])

@@ -5,7 +5,7 @@ export type Song = {
   id: number
   modified_name: string
   original_name: string
-  song_url: string | null
+  song_url: string
   user_id: string
 }
 
