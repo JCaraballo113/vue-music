@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import Home from '@/views/HomeView.vue'
 import Manage from '@/views/ManageView.vue'
+import SongDetail from '@/components/SongDetail.vue'
 import useUserStore from '@/stores/user'
 import supabase from '@/includes/supabase'
 
@@ -28,6 +29,11 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/:catchAll(.*)*',
     redirect: { name: 'Home' }
+  },
+  {
+    name: 'Song',
+    path: '/song/:id',
+    component: SongDetail
   }
 ]
 

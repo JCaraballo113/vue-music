@@ -37,6 +37,38 @@ export interface Database {
         }
         Relationships: []
       }
+      songs_comments: {
+        Row: {
+          comment: string
+          created_at: string
+          id: number
+          song_id: number
+          user_id: string
+        }
+        Insert: {
+          comment: string
+          created_at?: string
+          id?: number
+          song_id: number
+          user_id?: string
+        }
+        Update: {
+          comment?: string
+          created_at?: string
+          id?: number
+          song_id?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'songs_comments_song_id_fkey'
+            columns: ['song_id']
+            isOneToOne: false
+            referencedRelation: 'songs'
+            referencedColumns: ['id']
+          }
+        ]
+      }
       users: {
         Row: {
           age: number
@@ -45,7 +77,6 @@ export interface Database {
           email: string
           id: number
           name: string
-          song_id: number | null
         }
         Insert: {
           age: number
@@ -54,7 +85,6 @@ export interface Database {
           email: string
           id?: number
           name: string
-          song_id?: number | null
         }
         Update: {
           age?: number
@@ -63,17 +93,8 @@ export interface Database {
           email?: string
           id?: number
           name?: string
-          song_id?: number | null
         }
-        Relationships: [
-          {
-            foreignKeyName: 'users_song_id_fkey'
-            columns: ['song_id']
-            isOneToOne: false
-            referencedRelation: 'songs'
-            referencedColumns: ['id']
-          }
-        ]
+        Relationships: []
       }
     }
     Views: {
