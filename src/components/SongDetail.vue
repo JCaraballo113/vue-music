@@ -11,7 +11,7 @@
         class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
         @click="newSong(song)"
       >
-        <i class="fas fa-play"></i>
+        <i class="fas" :class="{ 'fa-play': !playing, 'fa-pause': playing }"></i>
       </button>
       <div class="z-50 text-left ml-8">
         <!-- Song Info -->
@@ -97,8 +97,11 @@ import { computed, onBeforeMount, ref, reactive, watch } from 'vue'
 import type { Song, SongComment } from '@/types/music'
 import usePlayerStore from '@/stores/player'
 import supabase from '@/includes/supabase'
+import { storeToRefs } from 'pinia'
 
-const { newSong } = usePlayerStore()
+const playerStore = usePlayerStore()
+const { newSong } = playerStore
+const { playing } = storeToRefs(playerStore)
 
 const route = useRoute()
 const router = useRouter()
