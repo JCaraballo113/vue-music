@@ -60,6 +60,21 @@ export default defineStore('player', () => {
       sound.value.play()
     }
   }
+
+  const updateSeek = (event: MouseEvent) => {
+    if (!sound.value.playing) {
+      return
+    }
+
+    const { x, width } = (event.currentTarget as HTMLElement).getBoundingClientRect()
+    const clickX = event.clientX - x
+    const percentage = clickX / width
+    const seconds = sound.value.duration() * percentage
+
+    sound.value.seek(seconds)
+    sound.value.once('seek', progress)
+  }
+
   return {
     currentSong,
     newSong,
@@ -68,6 +83,7 @@ export default defineStore('player', () => {
     playing,
     seek,
     duration,
-    playerProgress
+    playerProgress,
+    updateSeek
   }
 })
