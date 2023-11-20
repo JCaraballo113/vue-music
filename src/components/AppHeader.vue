@@ -1,18 +1,30 @@
 <script lang="ts" setup>
+import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import useModalStore from '@/stores/modal'
 import useUserStore from '@/stores/user'
+import { useI18n } from 'vue-i18n'
+
+const { locale } = useI18n()
 const modalStore = useModalStore()
 const router = useRouter()
 const route = useRoute()
 
 const userStore = useUserStore()
 
+const currentLocale = computed(() => {
+  return locale.value === 'en' ? 'English' : 'Español'
+})
+
 const logout = async () => {
   await userStore.logout()
   if (route.meta.requiresAuth) {
     router.push({ name: 'Home' })
   }
+}
+
+const changeLocale = () => {
+  locale.value = locale.value === 'en' ? 'es' : 'en'
 }
 </script>
 <template>
@@ -51,6 +63,13 @@ const logout = async () => {
               <a class="px-2 text-white" href="#" @click="logout">Log out</a>
             </li>
           </template>
+        </ul>
+        <ul class="ml-auto mt-1">
+          <li>
+            <a class="px-2 text-white" href="#" @click.prevent="changeLocale">{{
+              currentLocale
+            }}</a>
+          </li>
         </ul>
       </div>
     </nav>

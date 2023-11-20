@@ -3,10 +3,25 @@ import en from '@/locales/en.json'
 import es from '@/locales/es.json'
 
 export default createI18n({
+  legacy: false,
   locale: 'en',
   fallbackLocale: 'en',
   messages: {
     en,
     es
+  },
+  numberFormats: {
+    en: {
+      currency: {
+        style: 'currency',
+        currency: 'USD'
+      }
+    },
+    ja: {
+      currency: {
+        style: 'currency',
+        currency: 'JPY'
+      }
+    }
   }
 })

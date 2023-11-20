@@ -18,6 +18,9 @@
           <!-- Song Info -->
           <div class="text-3xl font-bold">{{ song?.modified_name }}</div>
           <div>{{ song?.genre }}</div>
+          <div class="song-price">
+            {{ $n(1, 'currency') }}
+          </div>
         </div>
       </div>
     </section>
@@ -27,7 +30,7 @@
         <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
           <!-- Comment Count -->
           <span class="card-title">{{
-            $tc('song.comment_count', song?.comment_count ?? 0, { count: song?.comment_count ?? 0 })
+            t('song.comment_count', { count: song?.comment_count ?? 0 }, song?.comment_count ?? 0)
           }}</span>
           <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
         </div>
@@ -96,6 +99,7 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { computed, onBeforeMount, ref, reactive, watch } from 'vue'
 import type { Song, SongComment } from '@/types/music'
@@ -106,6 +110,7 @@ import { storeToRefs } from 'pinia'
 const playerStore = usePlayerStore()
 const { newSong } = playerStore
 const { playing } = storeToRefs(playerStore)
+const { t } = useI18n()
 
 const route = useRoute()
 const router = useRouter()

@@ -4,5 +4,9 @@
   },
   "song": {
     "comment_count": "Sin comentarios | 1 comentario | {count} comentarios"
+  },
+  "register": {
+    "accept": "Acepto los {0} de Vue Music",
+    "tos": "Terminos de Servicio"
   }
 }
