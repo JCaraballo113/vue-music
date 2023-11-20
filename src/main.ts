@@ -4,6 +4,7 @@ import VeeValidatePlugin from '@/includes/validation'
 import './assets/base.css'
 import './assets/main.css'
 import supabase from './includes/supabase'
+import icon from '@/directives/icon'
 
 import App from './App.vue'
 import router from './router'
@@ -15,6 +16,7 @@ supabase.auth.onAuthStateChange((event, session) => {
     app.use(createPinia())
     app.use(router)
     app.use(VeeValidatePlugin)
+    app.directive('icon', icon)
 
     app.mount('#app')
   }
