@@ -6,9 +6,12 @@ import './assets/main.css'
 import supabase from './includes/supabase'
 import icon from '@/directives/icon'
 import i18n from '@/includes/i18n'
+import { registerSW } from 'virtual:pwa-register'
 
 import App from './App.vue'
 import router from './router'
+
+registerSW({ immediate: true })
 
 let app: ReturnType<typeof createApp>
 supabase.auth.onAuthStateChange((event, session) => {
